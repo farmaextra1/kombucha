@@ -54,23 +54,29 @@ Route::get('/payment', function () {
     return Inertia::render('PaymentPage');
 })->name('payment');
 
+
+
 Route::get('/order-confirmation', function () {
     return Inertia::render('OrderConfirmation');
 });
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+   
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'verified', \App\Http\Middleware\CheckRole::class.':admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::post('/admin/products', [AdminController::class, 'addProduct'])->name('admin.addProduct');
-    Route::put('/admin/products/{id}', [AdminController::class, 'updateProduct'])->name('admin.updateProduct');
-    Route::delete('/admin/products/{id}', [AdminController::class, 'deleteProduct'])->name('admin.deleteProduct');
+    Route::post('/admin', [AdminController::class, 'addProduct'])->name('admin.addProduct');
+    Route::put('/admin/{id}', [AdminController::class, 'updateProduct'])->name('admin.updateProduct');
+    Route::put('/admin/{id}', [AdminController::class, 'deleteProduct'])->name('admin.deleteProduct');
     // Add more routes for managing orders as needed
 });
 

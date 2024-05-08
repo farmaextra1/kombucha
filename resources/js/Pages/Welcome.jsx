@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, Head } from '@inertiajs/react';
 import Dropdown from '@/Components/Dropdown';
+import ApplicationLogo from '@/Components/ApplicationLogo';
+import NavLink from '@/Components/NavLink';
 
 export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, canRegister }) {
     const [categories, setCategories] = useState([]); 
@@ -57,45 +59,95 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
             <Head title="Welcome to Kombucha Shop" />
             <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl">Welcome to Kombucha Shop</h1>
-                    <div className="flex items-center">
-                        {auth.user ? (
-                            <div className="hidden sm:flex sm:items-center sm:ms-6">
-                                <div className="ms-3 relative">
-                                    <Dropdown>
-                                        <Dropdown.Trigger>
-                                            <span className="inline-flex rounded-md">
-                                                <button
-                                                    type="button"
-                                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                                >
-                                                    {auth.user.name}
-
-                                                    <svg
-                                                        className="ms-2 -me-0.5 h-4 w-4"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 20 20"
-                                                        fill="currentColor"
-                                                    >
-                                                        <path
-                                                            fillRule="evenodd"
-                                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                            clipRule="evenodd"
-                                                        />
-                                                    </svg>
-                                                </button>
-                                            </span>
-                                        </Dropdown.Trigger>
-
-                                        <Dropdown.Content>
-                                            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                                            <Dropdown.Link href={route('logout')} method="post" as="button">
-                                                Log Out
-                                            </Dropdown.Link>
-                                        </Dropdown.Content>
-                                    </Dropdown>
-                                </div>
+            <div className="flex items-center">
+            {auth.user ? (
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between h-16">
+                        <div className="flex">
+                            <div className="shrink-0 flex items-center">
+                                <Link href="/">
+                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                </Link>
                             </div>
+
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                    Dashboard
+                                </NavLink>
+                            </div>
+
+                            {/* Show this only if the user is an admin */}
+                            {auth.user.role === 'admin' && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink href={route('admin.index')} active={route().current('admin.index')}>
+                                    Admin Dashboard
+                                </NavLink>
+                                </div>
+                            )}
+                        </div>
+
+                    <div className="hidden sm:flex sm:items-center sm:ms-6">
+                        <div className="ms-3 relative">
+                            <Dropdown>
+                                <Dropdown.Trigger>
+                                    <span className="inline-flex rounded-md">
+                                        <button
+                                            type="button"
+                                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                        >
+                                            {auth.user.name}
+
+                                            <svg
+                                                className="ms-2 -me-0.5 h-4 w-4"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </Dropdown.Trigger>
+
+                                <Dropdown.Content>
+                                    <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                    <Dropdown.Link href={route('logout')} method="post" as="button">
+                                        Log Out
+                                    </Dropdown.Link>
+                                </Dropdown.Content>
+                            </Dropdown>
+                        </div>
+                    </div>
+
+                    <div className="-me-2 flex items-center sm:hidden">
+                        <button
+                            onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
+                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                        >
+                            <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                <path
+                                    className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M4 6h16M4 12h16M4 18h16"
+                                />
+                                <path
+                                    className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
                         ) : (
                             <>
                                 <Link href={route('login')} className="text-sm text-gray-700 underline">
@@ -146,11 +198,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                                     return (
                                         <div key={product.id} className="card">
                                             <Link href={route('product', product.id)}>
-                                                <img src={product.image} alt={product.name} className="h-96" />
+                                                <img src={`/storage/${product.image}`} alt={product.name} className="h-96" />
                                             </Link>
                                             <div className="p-2">
                                                 <h5 className="text-lg">{product.name}</h5>
-                                                <p>{product.price} Kč</p>
+                                                <p>{Number(product.price).toFixed(0)} Kč</p>
                                                 <p className="text-sm">Stock: {product.stock}</p>
                                                 {cartProduct ? (
                                                     <div className="flex items-center">

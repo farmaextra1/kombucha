@@ -42,31 +42,31 @@ export default function CartPage() {
                     <p>Your cart is empty.</p>
                 ) : (
                     <div>
-                        {cartItems.map((item) => (
-                            <div key={item.id} className="mb-4 flex items-center">
-                                <img src={item.image} alt={item.name} className="w-20 h-20 mr-4" />
+                        {cartItems.map((product) => (
+                            <div key={product.id} className="mb-4 flex items-center">
+                                <img src={`/storage/${product.image}`} alt={product.name} className="w-20 h-20 mr-4" />
                                 <div>
-                                    <h2 className="text-lg font-semibold">{item.name}</h2>
-                                    <p className="text-gray-500">Price: ${item.price}</p>
-                                    <p className="text-gray-500">Quantity: {item.quantity}</p>
-                                    <p className="text-gray-500">Stock: {item.stock}</p>
-                                    <div className="flex items-center">
+                                    <h2 className="text-lg font-semibold">{product.name}</h2>
+                                    <p className="text-gray-500">Cena: {product.price} Kč</p>
+                                    <p className="text-gray-500">Quantity: {product.quantity}</p>
+                                    <p className="text-gray-500">Stock: {product.stock}</p>
+                                    <div className="flex products-center">
                                         <button
                                             className="text-red-500 hover:text-red-700 mx-2"
-                                            onClick={() => handleRemoveFromCart(item.id)}
+                                            onClick={() => handleRemoveFromCart(product.id)}
                                         >
                                             -
                                         </button>
                                         <button
                                             className={`text-green-500 hover:text-green-700 mx-2 ${
-                                                item.quantity >= item.stock ? 'opacity-50 cursor-not-allowed' : ''
+                                                product.quantity >= product.stock ? 'opacity-50 cursor-not-allowed' : ''
                                             }`}
-                                            onClick={() => handleAddToCart(item.id)}
-                                            disabled={item.quantity >= item.stock}
+                                            onClick={() => handleAddToCart(product.id)}
+                                            disabled={product.quantity >= product.stock}
                                         >
                                             +
                                         </button>
-                                        {item.quantity >= item.stock && (
+                                        {product.quantity >= product.stock && (
                                             <p className="text-red-500 ml-2">Out of stock</p>
                                         )}
                                     </div>

@@ -131,12 +131,12 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
                 </div>
                 <div className="flex">
                     <div className="w-1/2">
-                        <img src={product.image} alt={product.name} className="w-full h-auto" />
+                        <img src={`/storage/${product.image}`} alt={product.name} className="w-full h-auto" />
                     </div>
                     <div className="w-1/2 pl-8">
                         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
                         <p className="text-gray-700 mb-4">{product.description}</p>
-                        <p className="text-lg font-bold mb-2">${product.price}</p>
+                        <p className="text-lg font-bold mb-2">{product.price} Kč</p>
                         <p className="text-sm mb-4">Stock: {product.stock}</p>
                         <div className="flex items-center">
                             {cartItems.find(item => item.id === product.id) ? (

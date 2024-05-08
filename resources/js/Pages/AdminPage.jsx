@@ -1,57 +1,106 @@
 import React, { useEffect, useState } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 
-export default function AdminPage({ products, orders }) {
+export default function AdminPage({ products, orders, categories }) {
     const [editingProduct, setEditingProduct] = useState(null);
+    const [editingProductImagePreview, setEditingProductImagePreview] = useState('');
+    const [newProductImagePreview, setNewProductImagePreview] = useState('');
+
+    // New Product Form
     const { data: newProduct, setData: setNewProduct, post, processing: addProcessing, reset: resetNewProduct } = useForm({
         name: '',
         description: '',
         price: '',
         stock: '',
+        category_id: '',
+        image: null,
     });
 
     const handleAddProduct = () => {
         post(route('admin.addProduct'), {
             onSuccess: () => {
                 resetNewProduct();
-                // Refresh the products list after successful addition
+                setNewProductImagePreview('');
+                alert('Product added successfully.');
             },
+            onError: () => {
+                alert('Error adding product.');
+            }
         });
     };
+
+    // Edited Product Form
+    const { data: editedProduct, setData: setEditedProduct, put, processing: updateProcessing, reset: resetEditedProduct } = useForm({
+        name: '',
+        description: '',
+        price: '',
+        stock: '',
+        category_id: '',
+        image: null,
+    });
+
+    useEffect(() => {
+        if (editingProduct) {
+            setEditedProduct({
+                name: editingProduct.name,
+                description: editingProduct.description,
+                price: editingProduct.price,
+                stock: editingProduct.stock,
+                category_id: editingProduct.category_id,
+                image: editingProduct.image,
+            });
+            // Set the image preview for the edited product
+            setEditingProductImagePreview(editingProduct.image ? `/storage/${editingProduct.image}` : '');
+        } else {
+            resetEditedProduct();
+        }
+    }, [editingProduct]);
+    
 
     const handleEditProduct = (product) => {
         setEditingProduct(product);
     };
-
-    const { data: editedProduct, setData: setEditedProduct, put, processing: updateProcessing, reset: resetEditedProduct } = useForm({
-        name: editingProduct?.name || '',
-        description: editingProduct?.description || '',
-        price: editingProduct?.price || '',
-        stock: editingProduct?.stock || '',
-    });
 
     const handleUpdateProduct = () => {
         put(route('admin.updateProduct', editingProduct.id), {
             onSuccess: () => {
                 setEditingProduct(null);
                 resetEditedProduct();
-                // Refresh the products list after successful update
+                setEditingProductImagePreview('');
+                alert('Product updated successfully.');
             },
+            onError: () => {
+                alert('Error updating product.');
+            }
         });
     };
 
     const handleDeleteProduct = (productId) => {
         if (confirm('Are you sure you want to delete this product?')) {
-            axios.delete(route('admin.deleteProduct', productId))
-                .then(() => {
-                    // Remove the deleted product from the products state
-                    setProducts(products.filter((product) => product.id !== productId));
-                })
-                .catch((error) => {
-                    console.error('Error deleting product:', error);
-                });
-        }
+            put(route('admin.deleteProduct', productId), {
+                onSuccess: () => {
+                    alert('Product deleted successfully.');
+                },
+                onError: () => {
+                    alert('Error updating product.');
+                }
+            });
+        };
+    }
+
+
+    const handleNewProductImageChange = (e) => {
+        const file = e.target.files[0];
+        setNewProduct('image', file);
+        setNewProductImagePreview(URL.createObjectURL(file));
     };
+
+    const handleEditedProductImageChange = (e) => {
+        const file = e.target.files[0];
+        setEditedProduct('image', file);
+        setEditingProductImagePreview(URL.createObjectURL(file));
+    };
+
 
     return (
         <>
@@ -73,6 +122,17 @@ export default function AdminPage({ products, orders }) {
                     <tbody>
                         {products.map((product) => (
                             <tr key={product.id}>
+                                <td className="border px-4 py-2">
+                                    {product.image ? (
+                                        <img 
+                                            src={`/storage/${product.image}`} 
+                                            alt={product.name} 
+                                            className="w-16 h-16 object-cover" // Adjust size as needed
+                                        />
+                                    ) : (
+                                        'No Image'
+                                    )}
+                                </td>
                                 <td className="border px-4 py-2">{product.name}</td>
                                 <td className="border px-4 py-2">{product.description}</td>
                                 <td className="border px-4 py-2">{product.price}</td>
@@ -130,6 +190,33 @@ export default function AdminPage({ products, orders }) {
                         onChange={(e) => setNewProduct('stock', e.target.value)}
                         className="border rounded py-1 px-2 mr-2"
                     />
+
+                    <select
+                        name="category_id"
+                        value={newProduct.category_id}
+                        onChange={(e) => setNewProduct('category_id', e.target.value)}
+                        className="border rounded py-1 px-2 mr-2"
+                    >
+                        <option value="">Select Category</option>
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        onChange={handleNewProductImageChange}
+                    />
+                    {newProductImagePreview && (
+                        <img 
+                            src={newProductImagePreview} 
+                            alt="Preview" 
+                            className="w-16 h-16 object-cover mb-2"
+                        />
+                    )}
                     <button
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
                         onClick={handleAddProduct}
@@ -142,6 +229,13 @@ export default function AdminPage({ products, orders }) {
                 {editingProduct && (
                     <div className="mb-4">
                         <h3 className="text-lg mb-2">Edit Product</h3>
+                        {editingProductImagePreview && (
+                            <img 
+                                src={editingProductImagePreview} 
+                                alt="Preview" 
+                                className="w-16 h-16 object-cover mb-2"
+                            />
+                        )}
                         <input
                             type="text"
                             name="name"
@@ -174,6 +268,25 @@ export default function AdminPage({ products, orders }) {
                             onChange={(e) => setEditedProduct('stock', e.target.value)}
                             className="border rounded py-1 px-2 mr-2"
                         />
+                        <select
+                            name="category_id"
+                            value={editedProduct.category_id}
+                            onChange={(e) => setEditedProduct('category_id', e.target.value)}
+                            className="border rounded py-1 px-2 mr-2"
+                        >
+                            <option value="">Select Category</option>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+                        <input
+                            type="file"
+                            name="image"
+                            accept="image/*"
+                            onChange={handleEditedProductImageChange}
+                        />
                         <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
                             onClick={handleUpdateProduct}
@@ -184,8 +297,7 @@ export default function AdminPage({ products, orders }) {
                     </div>
                 )}
 
-                <h2 className="text-xl mb-2">Orders</h2>
-                {/* Render the orders table */}
+    
             </div>
         </>
     );

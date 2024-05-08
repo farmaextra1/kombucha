@@ -26,7 +26,7 @@ class ProductSeeder extends Seeder
             'price' => 499,
             'category_id' => 1, // Make sure this category exists
             'stock' => 10,
-            'image' => '/images/kombucha1.png' // Example path
+            'image' => 'images/kombucha1.png' // Example path
         ]);
         Product::create([
             'id' => 2,
@@ -35,7 +35,7 @@ class ProductSeeder extends Seeder
             'price' => 899,
             'category_id' => 2, // Make sure this category exists
             'stock' => 100,
-            'image' => '/images/kombucha2.png' // Example path
+            'image' => 'images/kombucha2.png' // Example path
         ]);
 
         // Add more products as needed

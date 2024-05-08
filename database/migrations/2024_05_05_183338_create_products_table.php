@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->unsignedBigInteger('category_id')->index();
             $table->integer('stock');
-            $table->string('image')->nullable(); // Add this line to store image paths
+            $table->string('image'); // Add this line to store image paths
             $table->timestamps(); // This line adds the created_at and updated_at columns
         
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');

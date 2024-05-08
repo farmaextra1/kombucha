@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('city');
             $table->string('zip');
+            $table->string('company')->nullable();
+            $table->integer('phone');
             $table->string('country');
             $table->string('shipping_method');
             $table->string('payment_method');

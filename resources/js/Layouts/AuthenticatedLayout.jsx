@@ -11,29 +11,38 @@ export default function Authenticated({ user, header, children }) {
 
     useEffect(() => {
         fetch(route('orders.index'))
-            .then(response => response.json())
-            .then(data => setOrders(data))
-            .catch(error => console.error('Error:', error));
+            .then((response) => response.json())
+            .then((data) => setOrders(data))
+            .catch((error) => console.error('Error:', error));
     }, []);
 
     return (
         <div className="min-h-screen bg-gray-100">
-        <nav className="bg-white border-b border-gray-100">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                    <div className="flex">
-                        <div className="shrink-0 flex items-center">
-                            <Link href="/">
-                                <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                            </Link>
-                        </div>
+            <nav className="bg-white border-b border-gray-100">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between h-16">
+                        <div className="flex">
+                            <div className="shrink-0 flex items-center">
+                                <Link href="/">
+                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                </Link>
+                            </div>
 
-                        <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                            <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                Dashboard
-                            </NavLink>
+                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                    Dashboard
+                                </NavLink>
+                            </div>
+
+                            {/* Show this only if the user is an admin */}
+                            {user.role === 'admin' && (
+                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink href={route('admin.index')} active={route().current('admin.index')}>
+                                    Admin Dashboard
+                                </NavLink>
+                                </div>
+                            )}
                         </div>
-                    </div>
 
                     <div className="hidden sm:flex sm:items-center sm:ms-6">
                         <div className="ms-3 relative">
@@ -148,7 +157,7 @@ export default function Authenticated({ user, header, children }) {
                                                     {order.products.map(product => (
                                                         <div key={product.id} className="bg-white rounded-lg shadow-md p-4">
                                                             {product.image && (
-                                                                <img src={product.image} alt={product.name} className="w-full h-40 object-cover mb-2" />
+                                                                <img src={`/storage/${product.image}`}  alt={product.name} className="w-full h-40 object-cover mb-2" />
                                                             )}
                                                             <h4 className="font-semibold">{product.name}</h4>
                                                             <p className="text-gray-500">{product.category.name}</p>

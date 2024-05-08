@@ -80,12 +80,12 @@ export default function CheckoutPage() {
                 <h1 className="text-2xl mb-4">Checkout</h1>
                 <div className="flex flex-wrap md:flex-nowrap">
                     <div className="w-full md:w-2/3 p-5">
-                        {cartItems.map((item, index) => (
+                        {cartItems.map((product, index) => (
                             <div key={index} className="mb-4 flex items-center">
-                                <img src={item.image} alt={item.name} className="w-20 h-20 mr-4" />
+                                <img src={`/storage/${product.image}`} alt={product.name} className="w-20 h-20 mr-4" />
                                 <div>
-                                    <h5 className="text-lg font-semibold">{item.name}</h5>
-                                    <p>{item.quantity} x {item.price} CZK</p>
+                                    <h5 className="text-lg font-semibold">{product.name}</h5>
+                                    <p>{product.quantity} x {product.price} CZK</p>
                                 </div>
                             </div>
                         ))}

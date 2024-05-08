@@ -13,6 +13,8 @@ class Order extends Model
         'address',
         'city',
         'zip',
+        'company',
+        'phone',
         'country',
         'shipping_method',
         'payment_method',
