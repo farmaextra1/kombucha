@@ -54,116 +54,137 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
     };
 
+
+    const [isActive, setIsActive] = useState(false);
+
+    const handleToggle = () => {
+        setIsActive(!isActive);
+    };
+
     return (
         <>
-            <Head title="Welcome to Kombucha Shop" />
-            <div className="container mx-auto px-4">
-            <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center">
-            {auth.user ? (
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-16">
-                        <div className="flex">
-                            <div className="shrink-0 flex items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
+        <div className={`menu_section ${isActive ? 'hidden' : ''}`}>
+            <div className="menuDiv">
+            <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+            Přehled
+            </NavLink>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Přehled
-                                </NavLink>
-                            </div>
-
-                            {/* Show this only if the user is an admin */}
-                            {auth.user.role === 'admin' && (
-                                <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink href={route('admin.index')} active={route().current('admin.index')}>
-                                    Administrátorský přehled
-                                </NavLink>
+            {/* Show this only if the user is an admin */}
+            {auth.user.role === 'admin' && (
+            <NavLink href={route('admin.index')} active={route().current('admin.index')}>
+                Administrátorský přehled
+            </NavLink>
+            )}
+            <NavLink href={route('profile.edit')}>Profil</NavLink>
+            <NavLink href={route('logout')} method="post" as="button">
+                Odhlásit se
+            </NavLink>
+            </div>
+        </div>
+            <div className="container">
+                <div className="header">
+                <div className="header-content">
+                            {auth.user ? (
+                            <div className="auth-user-container">
+                                <div className="auth-user-content">
+                                <div className="auth-user-logo">
+                                    <Link href="/">
+                                    <ApplicationLogo className="logo" />
+                                    </Link>
                                 </div>
-                            )}
-                        </div>
 
-                    <div className="hidden sm:flex sm:items-center sm:ms-6">
-                        <div className="ms-3 relative">
-                            <Dropdown>
-                                <Dropdown.Trigger>
-                                    <span className="inline-flex rounded-md">
-                                        <button
-                                            type="button"
-                                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                                        >
+                                <div className="nav-links">
+                                    <NavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                    Přehled
+                                    </NavLink>
+
+                                    {/* Show this only if the user is an admin */}
+                                    {auth.user.role === 'admin' && (
+                                    <NavLink href={route('admin.index')} active={route().current('admin.index')}>
+                                        Administrátorský přehled
+                                    </NavLink>
+                                    )}
+                                </div>
+
+                        
+                                </div>
+
+                                <div className="right-container">
+                                <div className="auth-user-dropdown">
+                                    <div className="dropdown-container">
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                        <span className="dropdown-trigger">
+                                            <button type="button" className="dropdown-button">
                                             {auth.user.name}
-
                                             <svg
-                                                className="ms-2 -me-0.5 h-4 w-4"
+                                                className="dropdown-icon"
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 viewBox="0 0 20 20"
                                                 fill="currentColor"
                                             >
                                                 <path
-                                                    fillRule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clipRule="evenodd"
+                                                fillRule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
                                                 />
                                             </svg>
-                                        </button>
-                                    </span>
-                                </Dropdown.Trigger>
+                                            </button>
+                                        </span>
+                                        </Dropdown.Trigger>
 
-                                <Dropdown.Content>
-                                    <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
-                                    <Dropdown.Link href={route('logout')} method="post" as="button">
-                                        Odhlásit se
-                                    </Dropdown.Link>
-                                </Dropdown.Content>
-                            </Dropdown>
-                        </div>
-                    </div>
+                                        <Dropdown.Content>
+                                        <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
+                                        <Dropdown.Link href={route('logout')} method="post" as="button">
+                                            Odhlásit se
+                                        </Dropdown.Link>
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                    </div>
+                                </div>
 
-                    <div className="-me-2 flex items-center sm:hidden">
-                        <button
-                            onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
-                        >
-                            <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                <path
-                                    className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                                <path
-                                    className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-                        ) : (
+                                <Link href={route('cart')} className="cart-link">
+                                    Košík ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
+                                </Link>
+                                <div id="menu-toggle" onClick={handleToggle}>
+                                    <div id="menu-icon" className={isActive ? 'active' : ''}>
+                                        <div className="bar"></div>
+                                        <div className="bar bar2"></div>
+                                        <div className="bar"></div>
+                                    </div>
+                                </div>
+                                </div>
+                                 
+                             
+                            </div>
+                            ) : (
                             <>
-                                <Link href={route('login')} className="text-sm text-gray-700 underline">
-                                    Log in
-                                </Link>
-                                <Link href={route('register')} className="ml-4 text-sm text-gray-700 underline">
-                                    Register
-                                </Link>
+                            <div className="guest-header">
+                                <div className="auth-user-logo">
+                                    <Link href="/">
+                                        <ApplicationLogo className="logo" />
+                                    </Link>
+                                </div>
+                                <div className="right-container">
+                                    <Link href={route('login')} className="login-link">
+                                        Log in
+                                    </Link>
+                                    <Link href={route('register')} className="register-link">
+                                        Register
+                                    </Link>
+                                    <Link href={route('cart')} className="cart-link">
+                                        Košík ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
+                                    </Link>
+                                </div>
+                            </div>
                             </>
                         )}
-                        <div className="-me-2 flex items-center sm:hidden">
+                        {/* <div className="mobile-menu">
                             <button
                                 onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
-                                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                                className="mobile-menu-button"
                             >
-                                <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                <svg className="mobile-menu-icon" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path
                                         className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
                                         strokeLinecap="round"
@@ -180,17 +201,15 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                                     />
                                 </svg>
                             </button>
-                        </div>
+                        </div> */}
 
-                        <Link href={route('cart')} className="ml-4 text-sm text-gray-700 underline">
-                            Košík ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
-                        </Link>
+                    
                     </div>
                 </div>
                 {categories.map(category => (
-                    <div key={category.id} className="mb-8">
-                        <h2 className="text-xl font-bold mb-4">{category.name}</h2>
-                        <div className="grid grid-cols-3 gap-4">
+                    <div key={category.id} className="category">
+                        <h2 className="category-title">{category.name}</h2>
+                        <div className="product-grid">
                             {category.products
                                 .filter(product => product.stock > 0)
                                 .map(product => {
@@ -198,35 +217,35 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                                     return (
                                         <div key={product.id} className="card">
                                             <Link href={route('product', product.id)}>
-                                                <img src={`/storage/${product.image}`} alt={product.name} className="h-96" />
+                                                <img src={`/storage/${product.image}`} alt={product.name} className="product-image" />
                                             </Link>
-                                            <div className="p-2">
-                                                <h5 className="text-lg">{product.name}</h5>
-                                                <p>{Number(product.price).toFixed(0)} Kč</p>
-                                                <p className="text-sm">Skladem: {product.stock} ks</p>
+                                            <div className="card-content">
+                                                <h5 className="product-name">{product.name}</h5>
+                                                <p className="product-price">{Number(product.price).toFixed(0)} Kč</p>
+                                                <p className="product-stock">Skladem: {product.stock} ks</p>
                                                 {cartProduct ? (
-                                                    <div className="flex items-center">
+                                                    <div className="cart-controls">
                                                         <button
-                                                            className="hover:bg-red-700 text-white font-bold py-1 px-2 rounded bg-gray-500 rounded-1xl"
+                                                            className="cart-remove-button"
                                                             onClick={() => handleRemoveFromCart(product)}
                                                         >
                                                             -
                                                         </button>
-                                                        <span className="mx-2">{cartProduct.quantity}</span>
+                                                        <span className="cart-quantity">{cartProduct.quantity}</span>
                                                         <button
-                                                            className={`bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded ${cartProduct.quantity >= product.stock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                            className={`cart-add-button ${cartProduct.quantity >= product.stock ? 'disabled' : ''}`}
                                                             onClick={() => handleAddToCart(product)}
                                                             disabled={cartProduct.quantity >= product.stock}
                                                         >
                                                             +
                                                         </button>
                                                         {cartProduct.quantity >= product.stock && (
-                                                            <p className="text-red-500 ml-2">Víc není skladem</p>
+                                                            <p className="out-of-stock">Víc není skladem</p>
                                                         )}
                                                     </div>
                                                 ) : (
                                                     <button
-                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                        className="add-to-cart-button"
                                                         onClick={() => handleAddToCart(product)}
                                                     >
                                                         Přidat do košíku
