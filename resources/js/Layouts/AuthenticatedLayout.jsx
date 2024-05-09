@@ -13,7 +13,7 @@ export default function Authenticated({ user, header, children }) {
         fetch(route('orders.index'))
             .then((response) => response.json())
             .then((data) => setOrders(data))
-            .catch((error) => console.error('Error:', error));
+            .catch((error) => console.error('Chyba:', error));
     }, []);
 
     return (
@@ -30,7 +30,7 @@ export default function Authenticated({ user, header, children }) {
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
+                                    Přehled
                                 </NavLink>
                             </div>
 
@@ -38,7 +38,7 @@ export default function Authenticated({ user, header, children }) {
                             {user.role === 'admin' && (
                                 <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('admin.index')} active={route().current('admin.index')}>
-                                    Admin Dashboard
+                                    Administrátorský přehled
                                 </NavLink>
                                 </div>
                             )}
@@ -72,9 +72,9 @@ export default function Authenticated({ user, header, children }) {
                                 </Dropdown.Trigger>
 
                                 <Dropdown.Content>
-                                    <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                    <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
                                     <Dropdown.Link href={route('logout')} method="post" as="button">
-                                        Log Out
+                                        Odhlásit se
                                     </Dropdown.Link>
                                 </Dropdown.Content>
                             </Dropdown>
@@ -110,7 +110,7 @@ export default function Authenticated({ user, header, children }) {
             <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                 <div className="pt-2 pb-3 space-y-1">
                     <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                        Dashboard
+                        Přehled
                     </ResponsiveNavLink>
                 </div>
 
@@ -121,9 +121,9 @@ export default function Authenticated({ user, header, children }) {
                     </div>
 
                     <div className="mt-3 space-y-1">
-                        <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('profile.edit')}>Profil</ResponsiveNavLink>
                         <ResponsiveNavLink method="post" href={route('logout')} as="button">
-                            Log Out
+                            Odhlásit se
                         </ResponsiveNavLink>
                     </div>
                 </div>
@@ -141,29 +141,29 @@ export default function Authenticated({ user, header, children }) {
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                             <div className="p-6 bg-white border-b border-gray-200">
-                                <h2 className="font-semibold text-xl text-gray-800 leading-tight mb-4">Order History</h2>
+                                <h2 className="font-semibold text-xl text-gray-800 leading-tight mb-4">Historie objednávek</h2>
                                 {orders.length === 0 ? (
-                                    <p>No orders found.</p>
+                                    <p>Žádné objednávky nenalezeny.</p>
                                 ) : (
                                     <div>
                                         {orders.map(order => (
                                             <div key={order.id} className="mb-8">
-                                                <h3 className="font-semibold text-lg mb-2">Order ID: {order.id}</h3>
+                                                <h3 className="font-semibold text-lg mb-2">ID objednávky: {order.id}</h3>
                                                 <p className="mb-4">
-                                                    <span className="font-semibold">Total Price:</span> {order.total_price}
-                                                    <span className="font-semibold ml-4">Status:</span> {order.status}
+                                                    <span className="font-semibold">Celková cena:</span> {order.total_price}
+                                                    <span className="font-semibold ml-4">Stav:</span> {order.status}
                                                 </p>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                                     {order.products.map(product => (
                                                         <div key={product.id} className="bg-white rounded-lg shadow-md p-4">
                                                             {product.image && (
-                                                                <img src={`/storage/${product.image}`}  alt={product.name} className="w-full h-40 object-cover mb-2" />
+                                                                <img src={`/storage/${product.image}`} alt={product.name} className="w-full h-40 object-cover mb-2" />
                                                             )}
                                                             <h4 className="font-semibold">{product.name}</h4>
                                                             <p className="text-gray-500">{product.category.name}</p>
                                                             <p>
-                                                                <span className="font-semibold">Quantity:</span> {product.pivot.quantity}
-                                                                <span className="font-semibold ml-4">Price:</span> {product.pivot.price}
+                                                                <span className="font-semibold">Množství:</span> {product.pivot.quantity}
+                                                                <span className="font-semibold ml-4">Cena:</span> {product.pivot.price}
                                                             </p>
                                                         </div>
                                                     ))}

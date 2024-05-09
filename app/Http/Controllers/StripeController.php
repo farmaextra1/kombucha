@@ -7,6 +7,8 @@ use Stripe\StripeClient;
 use Stripe\Checkout\Session;
 use App\Models\Order;
 use App\Models\Product;
+use App\Mail\OrderConfirmation;
+use Illuminate\Support\Facades\Mail;
 
 class StripeController extends Controller
 {
@@ -145,6 +147,9 @@ public function handleWebhook(Request $request)
             $product->stock -= $item['quantity'];
             $product->save();
         }
+
+        // Send order confirmation email
+        Mail::to($email)->send(new OrderConfirmation($order));
     }
 
     return response('', 200);

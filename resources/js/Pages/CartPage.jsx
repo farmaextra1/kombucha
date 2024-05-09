@@ -5,7 +5,7 @@ export default function CartPage() {
     const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
-        // Retrieve cart items from local storage
+        // Položky košíku z místního úložiště
         const storedCartItems = localStorage.getItem('cartItems');
         if (storedCartItems) {
             setCartItems(JSON.parse(storedCartItems));
@@ -13,7 +13,7 @@ export default function CartPage() {
     }, []);
 
     const handleRemoveFromCart = (productId) => {
-        // Decrement the quantity or remove the item if it is the last one
+        // Snížení počtu kusů nebo odstranění položky, pokud je poslední
         const updatedCartItems = cartItems
             .map(item => item.id === productId ? { ...item, quantity: item.quantity - 1 } : item)
             .filter(item => item.quantity > 0);
@@ -22,7 +22,7 @@ export default function CartPage() {
     };
 
     const handleAddToCart = (productId) => {
-        // Increment the quantity of the product if it is less than the stock
+        // Zvýšení počtu kusů produktu, pokud je méně než na skladě
         const updatedCartItems = cartItems.map(item => {
             if (item.id === productId && item.quantity < item.stock) {
                 return { ...item, quantity: item.quantity + 1 };
@@ -35,11 +35,11 @@ export default function CartPage() {
 
     return (
         <>
-            <Head title="Shopping Cart" />
+            <Head title="Nákupní košík" />
             <div className="container mx-auto px-4">
-                <h1 className="text-2xl mb-4">Shopping Cart</h1>
+                <h1 className="text-2xl mb-4">Nákupní košík</h1>
                 {cartItems.length === 0 ? (
-                    <p>Your cart is empty.</p>
+                    <p>Váš košík je prázdný.</p>
                 ) : (
                     <div>
                         {cartItems.map((product) => (
@@ -48,8 +48,8 @@ export default function CartPage() {
                                 <div>
                                     <h2 className="text-lg font-semibold">{product.name}</h2>
                                     <p className="text-gray-500">Cena: {product.price} Kč</p>
-                                    <p className="text-gray-500">Quantity: {product.quantity}</p>
-                                    <p className="text-gray-500">Stock: {product.stock}</p>
+                                    <p className="text-gray-500">Množství: {product.quantity}</p>
+                                    <p className="text-gray-500">Skladem: {product.stock}</p>
                                     <div className="flex products-center">
                                         <button
                                             className="text-red-500 hover:text-red-700 mx-2"
@@ -67,7 +67,7 @@ export default function CartPage() {
                                             +
                                         </button>
                                         {product.quantity >= product.stock && (
-                                            <p className="text-red-500 ml-2">Out of stock</p>
+                                            <p className="text-red-500 ml-2">Víc není skladem</p>
                                         )}
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@ export default function CartPage() {
                             href={route('checkout')}
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         >
-                            Proceed to Checkout
+                            Pokračovat v objednávce
                         </Link>
                     </div>
                 )}

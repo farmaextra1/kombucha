@@ -16,7 +16,6 @@ export default function OrderConfirmation() {
                     <h1 className="text-4xl font-bold mb-4">Děkujeme za vaši objednávku!</h1>
                     <p className="text-xl mb-8">Vaše objednávka byla úspěšně zadaná.</p>
                     <div className="mb-8">
-                        <p className="text-lg">Číslo objednávky: <span className="font-bold">OBJEDNÁVKA-XXXXXX</span></p>
                         <p className="text-lg">Datum objednávky: <span className="font-bold">{new Date().toLocaleDateString()}</span></p>
                     </div>
                     <p className="text-lg mb-8">Brzy obdržíte potvrzení e-mailem s detaily vaší objednávky.</p>

@@ -55,10 +55,12 @@ Route::get('/payment', function () {
 })->name('payment');
 
 
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
 Route::get('/order-confirmation', function () {
     return Inertia::render('OrderConfirmation');
 });
+
 
 
 Route::middleware(['auth', 'verified'])->group(function () {

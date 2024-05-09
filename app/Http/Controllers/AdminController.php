@@ -94,6 +94,4 @@ class AdminController extends Controller
         return redirect()->route('admin.index')->with('success', 'Product deleted successfully.');
     }
     
-
-    // Add more methods for managing orders as needed
 }

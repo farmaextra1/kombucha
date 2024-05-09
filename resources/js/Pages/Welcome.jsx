@@ -72,7 +72,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
+                                    Přehled
                                 </NavLink>
                             </div>
 
@@ -80,7 +80,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                             {auth.user.role === 'admin' && (
                                 <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('admin.index')} active={route().current('admin.index')}>
-                                    Admin Dashboard
+                                    Administrátorský přehled
                                 </NavLink>
                                 </div>
                             )}
@@ -114,9 +114,9 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                                 </Dropdown.Trigger>
 
                                 <Dropdown.Content>
-                                    <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                    <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
                                     <Dropdown.Link href={route('logout')} method="post" as="button">
-                                        Log Out
+                                        Odhlásit se
                                     </Dropdown.Link>
                                 </Dropdown.Content>
                             </Dropdown>
@@ -183,7 +183,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                         </div>
 
                         <Link href={route('cart')} className="ml-4 text-sm text-gray-700 underline">
-                            Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
+                            Košík ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
                         </Link>
                     </div>
                 </div>
@@ -203,7 +203,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                                             <div className="p-2">
                                                 <h5 className="text-lg">{product.name}</h5>
                                                 <p>{Number(product.price).toFixed(0)} Kč</p>
-                                                <p className="text-sm">Stock: {product.stock}</p>
+                                                <p className="text-sm">Skladem: {product.stock} ks</p>
                                                 {cartProduct ? (
                                                     <div className="flex items-center">
                                                         <button
@@ -221,7 +221,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                                                             +
                                                         </button>
                                                         {cartProduct.quantity >= product.stock && (
-                                                            <p className="text-red-500 ml-2">Out of stock</p>
+                                                            <p className="text-red-500 ml-2">Víc není skladem</p>
                                                         )}
                                                     </div>
                                                 ) : (
@@ -229,7 +229,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                                                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                                         onClick={() => handleAddToCart(product)}
                                                     >
-                                                        Add to Cart
+                                                        Přidat do košíku
                                                     </button>
                                                 )}
                                             </div>

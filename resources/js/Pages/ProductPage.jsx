@@ -44,7 +44,7 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
     };
 
     if (!product) {
-        return <div>Loading...</div>;
+        return <div>Načítání...</div>;
     }
 
     return (
@@ -52,7 +52,7 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
             <Head title={product.name} />
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl">Welcome to Kombucha Shop</h1>
+                    <h1 className="text-2xl">Vítejte v magu</h1>
                     <div className="flex items-center">
                     {auth.user ? (
                             <div className="hidden sm:flex sm:items-center sm:ms-6">
@@ -83,9 +83,9 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
                                         </Dropdown.Trigger>
 
                                         <Dropdown.Content>
-                                            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                            <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
                                             <Dropdown.Link href={route('logout')} method="post" as="button">
-                                                Log Out
+                                                Odhlásit se
                                             </Dropdown.Link>
                                         </Dropdown.Content>
                                     </Dropdown>
@@ -94,10 +94,10 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
                         ) : (
                             <>
                                 <Link href={route('login')} className="text-sm text-gray-700 underline">
-                                    Log in
+                                    Přihlásit se
                                 </Link>
                                 <Link href={route('register')} className="ml-4 text-sm text-gray-700 underline">
-                                    Register
+                                    Registrovat
                                 </Link>
                             </>
                         )}
@@ -125,7 +125,7 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
                             </button>
                         </div>
                         <Link href={route('cart')} className="ml-4 text-sm text-gray-700 underline">
-                            Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
+                            Košík ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
                         </Link>
                     </div>
                 </div>
@@ -137,7 +137,7 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
                         <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
                         <p className="text-gray-700 mb-4">{product.description}</p>
                         <p className="text-lg font-bold mb-2">{product.price} Kč</p>
-                        <p className="text-sm mb-4">Stock: {product.stock}</p>
+                        <p className="text-sm mb-4">Skladem: {product.stock} ks</p>
                         <div className="flex items-center">
                             {cartItems.find(item => item.id === product.id) ? (
                                 <div className="flex items-center">
@@ -160,7 +160,7 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
                                         +
                                     </button>
                                     {cartItems.find(item => item.id === product.id).quantity >= product.stock && (
-                                        <p className="text-red-500 ml-2">Out of stock</p>
+                                        <p className="text-red-500 ml-2">Víc není skladem</p>
                                     )}
                                 </div>
                             ) : (
@@ -168,7 +168,7 @@ export default function ProductPage({ auth, product, canLogin, canRegister }) {
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                     onClick={handleAddToCart}
                                 >
-                                    Add to Cart
+                                    Přidat do košíku
                                 </button>
                             )}
                         </div>

@@ -30,7 +30,7 @@ export default function CheckoutPage() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
-        // Clear errors on input change
+        // Vymazat chyby při změně vstupu
         if (errors[name]) {
             setErrors({ ...errors, [name]: null });
         }
@@ -38,23 +38,23 @@ export default function CheckoutPage() {
 
     const validateForm = () => {
         const newErrors = {};
-        // Required fields
+        // Povinná pole
         ['email', 'firstName', 'lastName', 'address', 'city', 'zip', 'phone'].forEach(field => {
             if (!formData[field]) {
-                newErrors[field] = 'This field is required';
+                newErrors[field] = 'Toto pole je povinné';
             }
         });
-        // Email format
+        // Formát e-mailu
         if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email address is invalid';
+            newErrors.email = 'E-mailová adresa není platná';
         }
-        // Phone number must be numbers only
+        // Telefonní číslo může obsahovat pouze čísla
         if (formData.phone && !/^\d+$/.test(formData.phone)) {
-            newErrors.phone = 'Phone number must be numeric';
+            newErrors.phone = 'Telefonní číslo musí být číselné';
         }
-        // ZIP code checks
+        // Kontrola poštovního směrovacího čísla
         if (formData.zip && (!/^\d{5}$/.test(formData.zip))) {
-            newErrors.zip = 'ZIP code must be exactly 5 digits';
+            newErrors.zip = 'PSČ musí být přesně 5 číslic';
         }
         return newErrors;
     };
@@ -63,21 +63,18 @@ export default function CheckoutPage() {
         e.preventDefault();
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
-            console.log("ddsawad", validationErrors)
-
             setErrors(validationErrors);
             return;
         }
-        console.log("dwad")
         localStorage.setItem('checkoutData', JSON.stringify(formData));
-        router.visit('/payment'); // Navigate to payment page
+        router.visit('/payment'); 
     };
 
     return (
         <>
-            <Head title="Checkout" />
+            <Head title="Pokladna" />
             <div className="container mx-auto px-4">
-                <h1 className="text-2xl mb-4">Checkout</h1>
+                <h1 className="text-2xl mb-4">Pokladna</h1>
                 <div className="flex flex-wrap md:flex-nowrap">
                     <div className="w-full md:w-2/3 p-5">
                         {cartItems.map((product, index) => (
@@ -92,7 +89,6 @@ export default function CheckoutPage() {
                     </div>
                     <div className="w-full md:w-1/3 p-5 bg-gray-100">
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* Example for email input field with error display */}
                             <input
                                 type="email"
                                 name="email"
@@ -102,25 +98,23 @@ export default function CheckoutPage() {
                                 className={`w-full px-4 py-2 border rounded-md ${errors.email ? 'border-red-500' : ''}`}
                             />
                             {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
-                            {/* Additional form fields as shown above, similar setup with error handling */}
-                            {/* Example for select input field */}
                             <select
                                 name="country"
                                 value={formData.country}
                                 onChange={handleChange}
                                 className="w-full px-4 py-2 border rounded-md"
                             >
-                                <option value="CZ">Czech Republic</option>
-                                <option value="SK">Slovakia</option>
-                                <option value="DE">Germany</option>
-                                <option value="PL">Poland</option>
+                                <option value="CZ">Česká republika</option>
+                                <option value="SK">Slovensko</option>
+                                <option value="DE">Německo</option>
+                                <option value="PL">Polsko</option>
                             </select>
                             <input
                                 type="text"
                                 name="firstName"
                                 value={formData.firstName}
                                 onChange={handleChange}
-                                placeholder="First Name"
+                                placeholder="Jméno"
                                 className={`w-full px-4 py-2 border rounded-md ${errors.firstName ? 'border-red-500' : ''}`}
                             />
                             {errors.firstName && <p className="text-red-500 text-xs italic">{errors.firstName}</p>}
@@ -129,25 +123,25 @@ export default function CheckoutPage() {
                                 name="lastName"
                                 value={formData.lastName}
                                 onChange={handleChange}
-                                placeholder="Last Name"
-                                className={`w-full px-4 py-2 border rounded-md ${errors.firstName ? 'border-red-500' : ''}`}
+                                placeholder="Příjmení"
+                                className={`w-full px-4 py-2 border rounded-md ${errors.lastName ? 'border-red-500' : ''}`}
                             />
                             {errors.lastName && <p className="text-red-500 text-xs italic">{errors.lastName}</p>}
                             <input
-                             type="text"
-                             name="company"
-                             value={formData.company}
-                             onChange={handleChange}
-                             placeholder="Company (Optional)"
-                             className="w-full px-4 py-2 border rounded-md"
-                         />
+                                type="text"
+                                name="company"
+                                value={formData.company}
+                                onChange={handleChange}
+                                placeholder="Firma (volitelně)"
+                                className="w-full px-4 py-2 border rounded-md"
+                            />
                             <input
                                 type="text"
                                 name="address"
                                 value={formData.address}
                                 onChange={handleChange}
-                                placeholder="Address"
-                                className={`w-full px-4 py-2 border rounded-md ${errors.firstName ? 'border-red-500' : ''}`}
+                                placeholder="Adresa"
+                                className={`w-full px-4 py-2 border rounded-md ${errors.address ? 'border-red-500' : ''}`}
                             />
                             {errors.address && <p className="text-red-500 text-xs italic">{errors.address}</p>}
                             <input
@@ -155,8 +149,8 @@ export default function CheckoutPage() {
                                 name="city"
                                 value={formData.city}
                                 onChange={handleChange}
-                                placeholder="City"
-                                className={`w-full px-4 py-2 border rounded-md ${errors.firstName ? 'border-red-500' : ''}`}
+                                placeholder="Město"
+                                className={`w-full px-4 py-2 border rounded-md ${errors.city ? 'border-red-500' : ''}`}
                             />
                             {errors.city && <p className="text-red-500 text-xs italic">{errors.city}</p>}
                             <input
@@ -164,8 +158,8 @@ export default function CheckoutPage() {
                                 name="zip"
                                 value={formData.zip}
                                 onChange={handleChange}
-                                placeholder="ZIP Code"
-                                className={`w-full px-4 py-2 border rounded-md ${errors.firstName ? 'border-red-500' : ''}`}
+                                placeholder="PSČ"
+                                className={`w-full px-4 py-2 border rounded-md ${errors.zip ? 'border-red-500' : ''}`}
                             />
                             {errors.zip && <p className="text-red-500 text-xs italic">{errors.zip}</p>}
                             <input
@@ -173,15 +167,15 @@ export default function CheckoutPage() {
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
-                                placeholder="Phone"
-                                className={`w-full px-4 py-2 border rounded-md ${errors.firstName ? 'border-red-500' : ''}`}
-                            />     
+                                placeholder="Telefon"
+                                className={`w-full px-4 py-2 border rounded-md ${errors.phone ? 'border-red-500' : ''}`}
+                            />
                             {errors.phone && <p className="text-red-500 text-xs italic">{errors.phone}</p>}
                             <button
                                 type="submit"
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                             >
-                                Proceed to Payment
+                                Pokračovat k platbě
                             </button>
                         </form>
                     </div>
