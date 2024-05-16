@@ -46,6 +46,9 @@
     display: flex;
     flex-direction: row;
 }
+.right-container .register-link {
+    margin-left: 10px;
+}
 
 .dropdown-container .relative div .dropdown-trigger .dropdown-button {
     display: flex;

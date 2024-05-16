@@ -70,7 +70,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
             </NavLink>
 
             {/* Show this only if the user is an admin */}
-            {auth.user.role === 'admin' && (
+            {auth.user?.role === 'admin' && (
             <NavLink href={route('admin.index')} active={route().current('admin.index')}>
                 Administrátorský přehled
             </NavLink>
@@ -167,10 +167,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion, canLogin, ca
                                 </div>
                                 <div className="right-container">
                                     <Link href={route('login')} className="login-link">
-                                        Log in
+                                        Přihlásit se
                                     </Link>
                                     <Link href={route('register')} className="register-link">
-                                        Register
+                                        Registrovat
                                     </Link>
                                     <Link href={route('cart')} className="cart-link">
                                         Košík ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
