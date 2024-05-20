@@ -64,7 +64,7 @@ class AdminController extends Controller
         }
     }
 
-    // Only separating the image update from the updateProduct worked
+    // Only separating the image update from the updateProduct worked. When I submit a form that includes both text data and a file, the request payload is sent in a multipart format. This means that the request is divided into multiple parts, each containing a specific piece of data. 
     public function updateProductImage(Request $request, $id)
     {
         try {

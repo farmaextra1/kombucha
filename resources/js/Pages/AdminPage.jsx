@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
 import axios from 'axios';
+import '../../css/adminPage.css';
 
 export default function AdminPage({ products, orders, categories }) {
     const [editingProduct, setEditingProduct] = useState(null);
@@ -70,19 +71,19 @@ export default function AdminPage({ products, orders, categories }) {
                 stock: editedProduct.stock,
                 category_id: editedProduct.category_id,
             });
-    
+
             // Update the image separately if a new image is selected
             if (editedProduct.image instanceof File) {
                 const formData = new FormData();
                 formData.append('image', editedProduct.image);
-    
+
                 await axios.post(route('admin.updateProductImage', editingProduct.id), formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
                 });
             }
-    
+
             setEditingProduct(null);
             resetEditedProduct();
             setEditingProductImagePreview('');
@@ -92,7 +93,7 @@ export default function AdminPage({ products, orders, categories }) {
             alert('Chyba při aktualizaci produktu.');
         }
     };
-    
+
     const handleDeleteProduct = (productId) => {
         if (confirm('Opravdu chcete tento produkt odstranit?')) {
             put(route('admin.deleteProduct', productId), {
@@ -108,7 +109,6 @@ export default function AdminPage({ products, orders, categories }) {
             });
         }
     };
-    
 
     const handleNewProductImageChange = (e) => {
         const file = e.target.files[0];
@@ -125,48 +125,48 @@ export default function AdminPage({ products, orders, categories }) {
     return (
         <>
             <Head title="Administrátorský přehled" />
-            <div className="container mx-auto px-4">
-                <h1 className="text-2xl mb-4">Administrátorský přehled</h1>
+            <div className="admin-container">
+                <h1 className="admin-title">Administrátorský přehled</h1>
 
-                <h2 className="text-xl mb-2">Produkty</h2>
-                <table className="table-auto w-full mb-4">
+                <h2 className="admin-subtitle">Produkty</h2>
+                <table className="admin-table">
                     <thead>
                         <tr>
-                            <th className="px-4 py-2">Obrázek</th>
-                            <th className="px-4 py-2">Název</th>
-                            <th className="px-4 py-2">Popis</th>
-                            <th className="px-4 py-2">Cena</th>
-                            <th className="px-4 py-2">Sklad</th>
-                            <th className="px-4 py-2">Akce</th>
+                            <th className="admin-table-header">Obrázek</th>
+                            <th className="admin-table-header">Název</th>
+                            <th className="admin-table-header">Popis</th>
+                            <th className="admin-table-header">Cena</th>
+                            <th className="admin-table-header">Sklad</th>
+                            <th className="admin-table-header">Akce</th>
                         </tr>
                     </thead>
                     <tbody>
                         {products.map((product) => (
-                            <tr key={product.id}>
-                                <td className="border px-4 py-2">
+                            <tr key={product.id} className="admin-table-row">
+                                <td className="admin-table-cell">
                                     {product.image ? (
                                         <img
                                             src={`/storage/${product.image}`}
                                             alt={product.name}
-                                            className="w-16 h-16 object-cover"
+                                            className="admin-product-image"
                                         />
                                     ) : (
                                         'Žádný obrázek'
                                     )}
                                 </td>
-                                <td className="border px-4 py-2">{product.name}</td>
-                                <td className="border px-4 py-2">{product.description}</td>
-                                <td className="border px-4 py-2">{product.price}</td>
-                                <td className="border px-4 py-2">{product.stock}</td>
-                                <td className="border px-4 py-2">
+                                <td className="admin-table-cell">{product.name}</td>
+                                <td className="admin-table-cell">{product.description}</td>
+                                <td className="admin-table-cell">{product.price}</td>
+                                <td className="admin-table-cell">{product.stock}</td>
+                                <td className="admin-table-cell">
                                     <button
-                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
+                                        className="admin-button admin-button-edit"
                                         onClick={() => handleEditProduct(product)}
                                     >
                                         Upravit
                                     </button>
                                     <button
-                                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                                        className="admin-button admin-button-delete"
                                         onClick={() => handleDeleteProduct(product.id)}
                                     >
                                         Smazat
@@ -177,15 +177,15 @@ export default function AdminPage({ products, orders, categories }) {
                     </tbody>
                 </table>
 
-                <h3 className="text-lg mb-2">Přidat produkt</h3>
-                <div className="mb-4">
+                <h3 className="admin-form-title">Přidat produkt</h3>
+                <div className="admin-form">
                     <input
                         type="text"
                         name="name"
                         placeholder="Jméno"
                         value={newProduct.name}
                         onChange={(e) => setNewProduct('name', e.target.value)}
-                        className="border rounded py-1 px-2 mr-2"
+                        className="admin-input"
                     />
                     <input
                         type="text"
@@ -193,7 +193,7 @@ export default function AdminPage({ products, orders, categories }) {
                         placeholder="Popis"
                         value={newProduct.description}
                         onChange={(e) => setNewProduct('description', e.target.value)}
-                        className="border rounded py-1 px-2 mr-2"
+                        className="admin-input"
                     />
                     <input
                         type="number"
@@ -201,7 +201,7 @@ export default function AdminPage({ products, orders, categories }) {
                         placeholder="Cena"
                         value={newProduct.price}
                         onChange={(e) => setNewProduct('price', e.target.value)}
-                        className="border rounded py-1 px-2 mr-2"
+                        className="admin-input"
                     />
                     <input
                         type="number"
@@ -209,13 +209,13 @@ export default function AdminPage({ products, orders, categories }) {
                         placeholder="Sklad"
                         value={newProduct.stock}
                         onChange={(e) => setNewProduct('stock', e.target.value)}
-                        className="border rounded py-1 px-2 mr-2"
+                        className="admin-input"
                     />
                     <select
                         name="category_id"
                         value={newProduct.category_id}
                         onChange={(e) => setNewProduct('category_id', e.target.value)}
-                        className="border rounded py-1 px-2 mr-2"
+                        className="admin-select"
                     >
                         <option value="">Vybrat kategorii</option>
                         {categories.map((category) => (
@@ -226,7 +226,7 @@ export default function AdminPage({ products, orders, categories }) {
                     </select>
                     <button
                         type="button"
-                        className="bg-green-400 hover:bg-green-700 text-white font-bold py-1 px-2 rounded mr-2"
+                        className="admin-button admin-button-upload"
                         onClick={() => document.getElementById('newProductImage').click()}
                     >
                         Vyberte obrázek
@@ -236,18 +236,18 @@ export default function AdminPage({ products, orders, categories }) {
                         id="newProductImage"
                         name="image"
                         accept="image/*"
-                        className="hidden"
+                        className="admin-input-file"
                         onChange={handleNewProductImageChange}
                     />
                     {newProductImagePreview && (
                         <img
                             src={newProductImagePreview}
                             alt="Náhled"
-                            className="w-16 h-16 object-cover mb-2"
+                            className="admin-image-preview"
                         />
                     )}
                     <button
-                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+                        className="admin-button admin-button-add"
                         onClick={handleAddProduct}
                         disabled={addProcessing}
                     >
@@ -256,13 +256,13 @@ export default function AdminPage({ products, orders, categories }) {
                 </div>
 
                 {editingProduct && (
-                    <div className="mb-4">
-                        <h3 className="text-lg mb-2">Upravit produkt</h3>
+                    <div className="admin-form">
+                        <h3 className="admin-form-title">Upravit produkt</h3>
                         {editingProductImagePreview && (
                             <img
                                 src={editingProductImagePreview}
                                 alt="Náhled"
-                                className="w-16 h-16 object-cover mb-2"
+                                className="admin-image-preview"
                             />
                         )}
                         <input
@@ -271,7 +271,7 @@ export default function AdminPage({ products, orders, categories }) {
                             placeholder="Jméno"
                             value={editedProduct.name}
                             onChange={(e) => setEditedProduct('name', e.target.value)}
-                            className="border rounded py-1 px-2 mr-2"
+                            className="admin-input"
                         />
                         <input
                             type="text"
@@ -279,7 +279,7 @@ export default function AdminPage({ products, orders, categories }) {
                             placeholder="Popis"
                             value={editedProduct.description}
                             onChange={(e) => setEditedProduct('description', e.target.value)}
-                            className="border rounded py-1 px-2 mr-2"
+                            className="admin-input"
                         />
                         <input
                             type="number"
@@ -287,7 +287,7 @@ export default function AdminPage({ products, orders, categories }) {
                             placeholder="Cena"
                             value={editedProduct.price}
                             onChange={(e) => setEditedProduct('price', e.target.value)}
-                            className="border rounded py-1 px-2 mr-2"
+                            className="admin-input"
                         />
                         <input
                             type="number"
@@ -295,13 +295,13 @@ export default function AdminPage({ products, orders, categories }) {
                             placeholder="Sklad"
                             value={editedProduct.stock}
                             onChange={(e) => setEditedProduct('stock', e.target.value)}
-                            className="border rounded py-1 px-2 mr-2"
+                            className="admin-input"
                         />
                         <select
                             name="category_id"
                             value={editedProduct.category_id}
                             onChange={(e) => setEditedProduct('category_id', e.target.value)}
-                            className="border rounded py-1 px-2 mr-2"
+                            className="admin-select"
                         >
                             <option value="">Vybrat kategorii</option>
                             {categories.map((category) => (
@@ -312,7 +312,7 @@ export default function AdminPage({ products, orders, categories }) {
                         </select>
                         <button
                             type="button"
-                            className="bg-green-400 hover:bg-green-700 text-white font-bold py-1 px-2 rounded mr-2"
+                            className="admin-button admin-button-upload"
                             onClick={() => document.getElementById('editedProductImage').click()}
                         >
                             Vyberte obrázek
@@ -322,11 +322,11 @@ export default function AdminPage({ products, orders, categories }) {
                             id="editedProductImage"
                             name="image"
                             accept="image/*"
-                            className="hidden"
+                            className="admin-input-file"
                             onChange={handleEditedProductImageChange}
                         />
                         <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                            className="admin-button admin-button-update"
                             onClick={handleUpdateProduct}
                             disabled={updateProcessing}
                         >

@@ -95,7 +95,7 @@
   }
   
   .cart-link .cart-icon {
-    background-image: url('images/cartImage.png'); /* Correct path to your cart icon image */
+    background-image: url('/laravel/public/images/cartImage.png'); /* Correct path to your cart icon image */
     background-size: contain;
     background-repeat: no-repeat;
     width: 24px;
